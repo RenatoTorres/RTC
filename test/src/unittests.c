@@ -7,58 +7,46 @@
 
 #include <stdio.h>
 #include "unittests.h"
-#include "square.h"
+#include "platform_types.h"
+#include "RTC_API.h"
 
-struct MagicSquare* sq;
+#include <math.h>
 
-GROUP_SETUP(magic_square_3)
+GROUP_SETUP(RTC_API_TempVsADC)
 {
-	sq = create_magic_square(3);
+	
 }
 
-GROUP_TEARDOWN(magic_square_3)
+GROUP_TEARDOWN(RTC_API_TempVsADC)
 {
-	delete_magic_square(&sq);
+	
 }
 
-DEFINE_TEST_CASE(magic_square_3, test_fill)
+DEFINE_TEST_CASE(RTC_API_TempVsADC, TEMP_0)
 {
-	ASSERT_TRUE_TEXT(fill_magic_square(sq) == SUCCESS, "Expected fill_magic_square to return SUCCESS");
+	ASSERT_TRUE_TEXT( (fabs(getTemperature(1940) - 0.0f) < 0.5f)  , "Expected Temperature for 0 degrees");
 }
 
-DEFINE_TEST_CASE(magic_square_3, test_magic_constant)
+DEFINE_TEST_CASE(RTC_API_TempVsADC, TEMP_45)
 {
-	unsigned int expected = 15;
-	unsigned int result = 0;
-
-	ASSERT_TRUE_TEXT(fill_magic_square(sq) == SUCCESS, "Expected fill_magic_square to return SUCCESS");
-	ASSERT_TRUE_TEXT(get_magic_constant(sq, &result) == SUCCESS, "Expected get_magic_constant to return SUCCESS");
-	ASSERT_TRUE_TEXT(result == expected, "Incorrect magic constant");
+	ASSERT_TRUE_TEXT( ( fabs(getTemperature(2130) - 56.0f ) < 0.5f), "Expected Temperature for 45 degrees");
 }
 
-DEFINE_TEST_CASE(magic_square_3, test_row_and_col_sums)
+DEFINE_TEST_CASE(RTC_API_TempVsADC, RANGE_0_45)
 {
-	unsigned int expected = 15;
-	unsigned int result = 0;
-    unsigned int row_result = 0;
-    unsigned int col_result = 0;
-
-	ASSERT_TRUE_TEXT(fill_magic_square(sq) == SUCCESS, "Expected fill_magic_square to return SUCCESS");
-	ASSERT_TRUE_TEXT(get_magic_constant(sq, &result) == SUCCESS, "Expected get_magic_constant to return SUCCESS");
-	ASSERT_TRUE_TEXT(result == expected, "Incorrect magic constant");
-	ASSERT_TRUE_TEXT(sum_row(0, sq, &row_result) == SUCCESS, "Expected sum_row to return SUCCESS");
-	ASSERT_TRUE_TEXT(sum_column(2, sq, &col_result) == SUCCESS, "Expected sum_column to return SUCCESS");
-	printf("Col %d ROw %d\n", col_result, row_result);
-	ASSERT_TRUE_TEXT(((result == row_result) && (result  == col_result)), "Rows and Columns should sum to the magic constant");
-
+	for(int i = 0; i<46; i++)
+	{
+		uint16_t adcVal = getADCfromTemp( i );
+		ASSERT_TRUE_TEXT( ( fabs(getTemperature(adcVal) - ((float)i) ) < 0.5f), "Expected Temperature for CORRECT for 0-45 degrees");
+	}
 }
 
-TEST_GROUP_RUNNER(magic_square_3)
-{
-	INIT_TEST_GROUP(magic_square_3);
 
-	RUN_TEST_CASE(magic_square_3, test_fill);
-	RUN_TEST_CASE(magic_square_3, test_magic_constant);
-	RUN_TEST_CASE(magic_square_3, test_row_and_col_sums);
+
+TEST_GROUP_RUNNER(RTC_API_TempVsADC)
+{
+	INIT_TEST_GROUP(RTC_API_TempVsADC);
+	RUN_TEST_CASE(RTC_API_TempVsADC, TEMP_0);
+	RUN_TEST_CASE(RTC_API_TempVsADC, TEMP_45);
 }
 

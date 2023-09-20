@@ -9,6 +9,6 @@
 #define INCLUDE_UNITTESTS_H_
 #include "unittest_framework.h"
 
-TEST_GROUP_RUNNER(magic_square_3);
+TEST_GROUP_RUNNER(RTC_API_TempVsADC);
 
 #endif /* INCLUDE_UNITTESTS_H_ */

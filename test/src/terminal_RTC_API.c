@@ -8,7 +8,8 @@ void main()
 
     while(uiloop)
     {
-        scanf("Value of ADC (12bit - 0 to 4095): %d", &uiADCVal);
+        printf("Value of ADC (12bit - 0 to 4095): ");
+        scanf("%hu", &uiADCVal);
 
         if(uiADCVal == 0)
         {
@@ -16,6 +17,6 @@ void main()
             continue;
         }
 
-        printf("ADC Value: %04d => Temperature in Celsius: %02.2f\n", uiADCVal, getTemperature(uiADCVal));
+        printf("ADC Value: %04hu => Temperature in Celsius: %02.2f\n", uiADCVal, getTemperature(uiADCVal));
     }
 }

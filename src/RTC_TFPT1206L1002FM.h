@@ -1,8 +1,8 @@
-#ifndef TFPT_VISHAY_H
-#define TFPT_VISHAY_H
+#ifndef RTC_TFPT1206L1002FM
+#define RTC_TFPT1206L1002FM
 
 /**
- * @file TFPT_Vishay.h
+ * @file RTC_TFPT1206L1002FM.h
  * @brief Header file for the TFPT Vishay temperature sensor.
  */
 
@@ -231,5 +231,5 @@ const struct TFPT_Vishay TFPT_Vishay_Values[] = {
 {150.0, 1.595}
 };
 
-#endif // TFPT_VISHAY_H
+#endif // RTC_TFPT1206L1002FM
 

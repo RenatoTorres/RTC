@@ -1,6 +1,8 @@
 #include "platform_types.h"
 #include "RTC_TFPT1206L1002FM.h"
 
+#define _DEBUG_RTC_API  0
+
 /**
  * @brief Binary search to find the temperature based on datasheet values.
  *
@@ -43,8 +45,19 @@ static float getTemp_Datasheet(float targetRatio) {
             float fR1 = TFPT_Vishay_Values[resultIndex - 1].fRatio_R25;
             float fR2 = TFPT_Vishay_Values[resultIndex].fRatio_R25;
             float fTx = fT1 + ((targetRatio - fR1) / (fR2 - fR1));
+            
+            #if( _DEBUG_RTC_API == 1)
+            printf("getTemp_Datasheet(targetRatio=%f, fT1=%f, fT2=%f, fR1=%f, fR2=%f) => fTx = %f\n", targetRatio, fT1, fT2, fR1, fR2, fTx);
+            #endif
+
             return fTx;
-        } else {
+        }
+        else 
+        {
+            #if( _DEBUG_RTC_API == 1)
+            printf("getTemp_Datasheet(targetRatio=%f, fTx=%f\n", targetRatio, TFPT_Vishay_Values[resultIndex].ftemperature);
+            #endif
+        
             return TFPT_Vishay_Values[resultIndex].ftemperature;
         }
     } else {
@@ -73,7 +86,12 @@ static float getRatioFromADCValue(uint16_t uiADCVal) {
     // R213/R600 = datasheet_ratio itself
 
     uint16_t VREF = 4095;
-    float fratio = (uiADCVal) / (VREF - uiADCVal);
+    float diff = (float) (VREF - uiADCVal);
+    float fratio = ((float)(uiADCVal)) / ((float) diff) ;
+
+    #if( _DEBUG_RTC_API == 1)
+    printf("getRatioFromADCValue(%hu) => %f\n", uiADCVal, fratio);
+    #endif
 
     return fratio;
 }

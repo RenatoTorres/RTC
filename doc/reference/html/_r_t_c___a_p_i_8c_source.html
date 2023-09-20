@@ -84,71 +84,89 @@ $(document).ready(function() { init_codefold(0); });
 <a href="_r_t_c___a_p_i_8c.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#include &quot;<a class="code" href="platform__types_8h.html">platform_types.h</a>&quot;</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#include &quot;<a class="code" href="_r_t_c___t_f_p_t1206_l1002_f_m_8h.html">RTC_TFPT1206L1002FM.h</a>&quot;</span></div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span> </div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="keyword">static</span> <span class="keywordtype">float</span> getTemp_Datasheet(<span class="keywordtype">float</span> targetRatio) {</div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>    <span class="keywordtype">int</span> low = 0;</div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>    <span class="keywordtype">int</span> high = <span class="keyword">sizeof</span>(<a class="code hl_variable" href="_r_t_c___t_f_p_t1206_l1002_f_m_8h.html#a778b2b7f8aca4dda3dcaee7636cb2a72">TFPT_Vishay_Values</a>) / <span class="keyword">sizeof</span>(<a class="code hl_variable" href="_r_t_c___t_f_p_t1206_l1002_f_m_8h.html#a778b2b7f8aca4dda3dcaee7636cb2a72">TFPT_Vishay_Values</a>[0]) - 1;</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    <span class="keywordtype">int</span> resultIndex = -1;</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    <span class="keywordflow">while</span> (low &lt;= high) {</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>        <span class="keywordtype">int</span> mid = low + (high - low) / 2;</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>        <span class="keywordflow">if</span> (<a class="code hl_variable" href="_r_t_c___t_f_p_t1206_l1002_f_m_8h.html#a778b2b7f8aca4dda3dcaee7636cb2a72">TFPT_Vishay_Values</a>[mid].fRatio_R25 == targetRatio) {</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>            resultIndex = mid;</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>            <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>        }</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>        <span class="keywordflow">if</span> (<a class="code hl_variable" href="_r_t_c___t_f_p_t1206_l1002_f_m_8h.html#a778b2b7f8aca4dda3dcaee7636cb2a72">TFPT_Vishay_Values</a>[mid].fRatio_R25 &lt; targetRatio) {</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>            low = mid + 1;</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>        } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>            resultIndex = mid;</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>            high = mid - 1;</div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>        }</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    }</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    <span class="keywordflow">if</span> (resultIndex != -1) {</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>        <span class="comment">// Found the exact match or the next lower fRatio</span></div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>        <span class="keywordflow">if</span> (resultIndex &gt; 0) {</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>            <span class="comment">// Use linearization between 2 datasheet points to optimize accuracy</span></div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>            <span class="comment">// fTx = fT1 + ((fRx - fR1)/(fR2 - fR1))*(T2 - T1);</span></div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>            <span class="comment">// (T2 - T1) is always 1 oC</span></div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>            <span class="keywordtype">float</span> fT1 = <a class="code hl_variable" href="_r_t_c___t_f_p_t1206_l1002_f_m_8h.html#a778b2b7f8aca4dda3dcaee7636cb2a72">TFPT_Vishay_Values</a>[resultIndex - 1].<a class="code hl_variable" href="struct_t_f_p_t___vishay.html#a98ef973afd76b39a6cec35eaaddc3065">ftemperature</a>;</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>            <span class="keywordtype">float</span> fT2 = <a class="code hl_variable" href="_r_t_c___t_f_p_t1206_l1002_f_m_8h.html#a778b2b7f8aca4dda3dcaee7636cb2a72">TFPT_Vishay_Values</a>[resultIndex].<a class="code hl_variable" href="struct_t_f_p_t___vishay.html#a98ef973afd76b39a6cec35eaaddc3065">ftemperature</a>;</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>            <span class="keywordtype">float</span> fR1 = <a class="code hl_variable" href="_r_t_c___t_f_p_t1206_l1002_f_m_8h.html#a778b2b7f8aca4dda3dcaee7636cb2a72">TFPT_Vishay_Values</a>[resultIndex - 1].<a class="code hl_variable" href="struct_t_f_p_t___vishay.html#a41968c80b2e868c66e6ba9a3e4ba75c3">fRatio_R25</a>;</div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>            <span class="keywordtype">float</span> fR2 = <a class="code hl_variable" href="_r_t_c___t_f_p_t1206_l1002_f_m_8h.html#a778b2b7f8aca4dda3dcaee7636cb2a72">TFPT_Vishay_Values</a>[resultIndex].<a class="code hl_variable" href="struct_t_f_p_t___vishay.html#a41968c80b2e868c66e6ba9a3e4ba75c3">fRatio_R25</a>;</div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>            <span class="keywordtype">float</span> fTx = fT1 + ((targetRatio - fR1) / (fR2 - fR1));</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>            <span class="keywordflow">return</span> fTx;</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>        } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>            <span class="keywordflow">return</span> <a class="code hl_variable" href="_r_t_c___t_f_p_t1206_l1002_f_m_8h.html#a778b2b7f8aca4dda3dcaee7636cb2a72">TFPT_Vishay_Values</a>[resultIndex].<a class="code hl_variable" href="struct_t_f_p_t___vishay.html#a98ef973afd76b39a6cec35eaaddc3065">ftemperature</a>;</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>        }</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>        <span class="comment">// Return &#39;absolute zero&#39; in case of ratio out of range</span></div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>        <span class="keywordflow">return</span> -273.0f;</div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    }</div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>}</div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span><span class="keyword">static</span> <span class="keywordtype">float</span> getRatioFromADCValue(<a class="code hl_typedef" href="platform__types_8h.html#adf4d876453337156dde61095e1f20223">uint16_t</a> uiADCVal) {</div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    <span class="comment">// 12-bit ADC =&gt; 2^12 = 4096</span></div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>    <span class="comment">// Range:</span></div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    <span class="comment">// 0V   - 0</span></div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    <span class="comment">// 2.5V - 4095</span></div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span> </div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    <span class="comment">// R213 = [(uiADCVal) / (VREF - uiADCVal)] * R600</span></div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    <span class="comment">// However, R600 is 10K and R213 (TFPT1206L1002FM) is 10K on 25 oC.</span></div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    <span class="comment">// R213/R600 = datasheet_ratio itself</span></div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span> </div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>    <a class="code hl_typedef" href="platform__types_8h.html#adf4d876453337156dde61095e1f20223">uint16_t</a> VREF = 4095;</div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>    <span class="keywordtype">float</span> fratio = (uiADCVal) / (VREF - uiADCVal);</div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span> </div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>    <span class="keywordflow">return</span> fratio;</div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>}</div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span> </div>
-<div class="foldopen" id="foldopen00091" data-start="{" data-end="}">
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno"><a class="line" href="_r_t_c___a_p_i_8c.html#a77a7a8c543017522605adb4fdbba38e5">   91</a></span><span class="keywordtype">float</span> <a class="code hl_function" href="_r_t_c___a_p_i_8c.html#a77a7a8c543017522605adb4fdbba38e5">getTemperature</a>(<a class="code hl_typedef" href="platform__types_8h.html#adf4d876453337156dde61095e1f20223">uint16_t</a> uiADCVal) {</div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>    <span class="keywordflow">return</span> getTemp_Datasheet(getRatioFromADCValue(uiADCVal));</div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>}</div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno"><a class="line" href="_r_t_c___a_p_i_8c.html#aca87687b17fe124bf56bc1b834a14e3a">    4</a></span><span class="preprocessor">#define _DEBUG_RTC_API  0</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span> </div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="keyword">static</span> <span class="keywordtype">float</span> getTemp_Datasheet(<span class="keywordtype">float</span> targetRatio) {</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    <span class="keywordtype">int</span> low = 0;</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    <span class="keywordtype">int</span> high = <span class="keyword">sizeof</span>(<a class="code hl_variable" href="_r_t_c___t_f_p_t1206_l1002_f_m_8h.html#a778b2b7f8aca4dda3dcaee7636cb2a72">TFPT_Vishay_Values</a>) / <span class="keyword">sizeof</span>(<a class="code hl_variable" href="_r_t_c___t_f_p_t1206_l1002_f_m_8h.html#a778b2b7f8aca4dda3dcaee7636cb2a72">TFPT_Vishay_Values</a>[0]) - 1;</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    <span class="keywordtype">int</span> resultIndex = -1;</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    <span class="keywordflow">while</span> (low &lt;= high) {</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>        <span class="keywordtype">int</span> mid = low + (high - low) / 2;</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>        <span class="keywordflow">if</span> (<a class="code hl_variable" href="_r_t_c___t_f_p_t1206_l1002_f_m_8h.html#a778b2b7f8aca4dda3dcaee7636cb2a72">TFPT_Vishay_Values</a>[mid].fRatio_R25 == targetRatio) {</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>            resultIndex = mid;</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>            <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>        }</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>        <span class="keywordflow">if</span> (<a class="code hl_variable" href="_r_t_c___t_f_p_t1206_l1002_f_m_8h.html#a778b2b7f8aca4dda3dcaee7636cb2a72">TFPT_Vishay_Values</a>[mid].fRatio_R25 &lt; targetRatio) {</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>            low = mid + 1;</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>        } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>            resultIndex = mid;</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>            high = mid - 1;</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>        }</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    }</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    <span class="keywordflow">if</span> (resultIndex != -1) {</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>        <span class="comment">// Found the exact match or the next lower fRatio</span></div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>        <span class="keywordflow">if</span> (resultIndex &gt; 0) {</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>            <span class="comment">// Use linearization between 2 datasheet points to optimize accuracy</span></div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>            <span class="comment">// fTx = fT1 + ((fRx - fR1)/(fR2 - fR1))*(T2 - T1);</span></div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>            <span class="comment">// (T2 - T1) is always 1 oC</span></div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>            <span class="keywordtype">float</span> fT1 = <a class="code hl_variable" href="_r_t_c___t_f_p_t1206_l1002_f_m_8h.html#a778b2b7f8aca4dda3dcaee7636cb2a72">TFPT_Vishay_Values</a>[resultIndex - 1].<a class="code hl_variable" href="struct_t_f_p_t___vishay.html#a98ef973afd76b39a6cec35eaaddc3065">ftemperature</a>;</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>            <span class="keywordtype">float</span> fT2 = <a class="code hl_variable" href="_r_t_c___t_f_p_t1206_l1002_f_m_8h.html#a778b2b7f8aca4dda3dcaee7636cb2a72">TFPT_Vishay_Values</a>[resultIndex].<a class="code hl_variable" href="struct_t_f_p_t___vishay.html#a98ef973afd76b39a6cec35eaaddc3065">ftemperature</a>;</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>            <span class="keywordtype">float</span> fR1 = <a class="code hl_variable" href="_r_t_c___t_f_p_t1206_l1002_f_m_8h.html#a778b2b7f8aca4dda3dcaee7636cb2a72">TFPT_Vishay_Values</a>[resultIndex - 1].<a class="code hl_variable" href="struct_t_f_p_t___vishay.html#a41968c80b2e868c66e6ba9a3e4ba75c3">fRatio_R25</a>;</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>            <span class="keywordtype">float</span> fR2 = <a class="code hl_variable" href="_r_t_c___t_f_p_t1206_l1002_f_m_8h.html#a778b2b7f8aca4dda3dcaee7636cb2a72">TFPT_Vishay_Values</a>[resultIndex].<a class="code hl_variable" href="struct_t_f_p_t___vishay.html#a41968c80b2e868c66e6ba9a3e4ba75c3">fRatio_R25</a>;</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>            <span class="keywordtype">float</span> fTx = fT1 + ((targetRatio - fR1) / (fR2 - fR1));</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>            </div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="preprocessor">            #if( _DEBUG_RTC_API == 1)</span></div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>            printf(<span class="stringliteral">&quot;getTemp_Datasheet(targetRatio=%f, fT1=%f, fT2=%f, fR1=%f, fR2=%f) =&gt; fTx = %f\n&quot;</span>, targetRatio, fT1, fT2, fR1, fR2, fTx);</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span><span class="preprocessor">            #endif</span></div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span> </div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>            <span class="keywordflow">return</span> fTx;</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>        }</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>        <span class="keywordflow">else</span> </div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>        {</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span><span class="preprocessor">            #if( _DEBUG_RTC_API == 1)</span></div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>            printf(<span class="stringliteral">&quot;getTemp_Datasheet(targetRatio=%f, fTx=%f\n&quot;</span>, targetRatio, <a class="code hl_variable" href="_r_t_c___t_f_p_t1206_l1002_f_m_8h.html#a778b2b7f8aca4dda3dcaee7636cb2a72">TFPT_Vishay_Values</a>[resultIndex].ftemperature);</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span><span class="preprocessor">            #endif</span></div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>        </div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>            <span class="keywordflow">return</span> <a class="code hl_variable" href="_r_t_c___t_f_p_t1206_l1002_f_m_8h.html#a778b2b7f8aca4dda3dcaee7636cb2a72">TFPT_Vishay_Values</a>[resultIndex].<a class="code hl_variable" href="struct_t_f_p_t___vishay.html#a98ef973afd76b39a6cec35eaaddc3065">ftemperature</a>;</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>        }</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>        <span class="comment">// Return &#39;absolute zero&#39; in case of ratio out of range</span></div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>        <span class="keywordflow">return</span> -273.0f;</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    }</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>}</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span> </div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span><span class="keyword">static</span> <span class="keywordtype">float</span> getRatioFromADCValue(<a class="code hl_typedef" href="platform__types_8h.html#adf4d876453337156dde61095e1f20223">uint16_t</a> uiADCVal) {</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>    <span class="comment">// 12-bit ADC =&gt; 2^12 = 4096</span></div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>    <span class="comment">// Range:</span></div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>    <span class="comment">// 0V   - 0</span></div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>    <span class="comment">// 2.5V - 4095</span></div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span> </div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>    <span class="comment">// R213 = [(uiADCVal) / (VREF - uiADCVal)] * R600</span></div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>    <span class="comment">// However, R600 is 10K and R213 (TFPT1206L1002FM) is 10K on 25 oC.</span></div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>    <span class="comment">// R213/R600 = datasheet_ratio itself</span></div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span> </div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>    <a class="code hl_typedef" href="platform__types_8h.html#adf4d876453337156dde61095e1f20223">uint16_t</a> VREF = 4095;</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>    <span class="keywordtype">float</span> diff = (float) (VREF - uiADCVal);</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>    <span class="keywordtype">float</span> fratio = ((float)(uiADCVal)) / ((<span class="keywordtype">float</span>) diff) ;</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span> </div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span><span class="preprocessor">    #if( _DEBUG_RTC_API == 1)</span></div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>    printf(<span class="stringliteral">&quot;getRatioFromADCValue(%hu) =&gt; %f\n&quot;</span>, uiADCVal, fratio);</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span><span class="preprocessor">    #endif</span></div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span> </div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>    <span class="keywordflow">return</span> fratio;</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>}</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span> </div>
+<div class="foldopen" id="foldopen00109" data-start="{" data-end="}">
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno"><a class="line" href="_r_t_c___a_p_i_8c.html#a77a7a8c543017522605adb4fdbba38e5">  109</a></span><span class="keywordtype">float</span> <a class="code hl_function" href="_r_t_c___a_p_i_8c.html#a77a7a8c543017522605adb4fdbba38e5">getTemperature</a>(<a class="code hl_typedef" href="platform__types_8h.html#adf4d876453337156dde61095e1f20223">uint16_t</a> uiADCVal) {</div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>    <span class="keywordflow">return</span> getTemp_Datasheet(getRatioFromADCValue(uiADCVal));</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>}</div>
 </div>
-<div class="ttc" id="a_r_t_c___a_p_i_8c_html_a77a7a8c543017522605adb4fdbba38e5"><div class="ttname"><a href="_r_t_c___a_p_i_8c.html#a77a7a8c543017522605adb4fdbba38e5">getTemperature</a></div><div class="ttdeci">float getTemperature(uint16_t uiADCVal)</div><div class="ttdoc">Get the temperature in degrees Celsius from an ADC value.</div><div class="ttdef"><b>Definition</b> <a href="_r_t_c___a_p_i_8c_source.html#l00091">RTC_API.c:91</a></div></div>
-<div class="ttc" id="a_r_t_c___t_f_p_t1206_l1002_f_m_8h_html"><div class="ttname"><a href="_r_t_c___t_f_p_t1206_l1002_f_m_8h.html">RTC_TFPT1206L1002FM.h</a></div></div>
+<div class="ttc" id="a_r_t_c___a_p_i_8c_html_a77a7a8c543017522605adb4fdbba38e5"><div class="ttname"><a href="_r_t_c___a_p_i_8c.html#a77a7a8c543017522605adb4fdbba38e5">getTemperature</a></div><div class="ttdeci">float getTemperature(uint16_t uiADCVal)</div><div class="ttdoc">Get the temperature in degrees Celsius from an ADC value.</div><div class="ttdef"><b>Definition</b> <a href="_r_t_c___a_p_i_8c_source.html#l00109">RTC_API.c:109</a></div></div>
+<div class="ttc" id="a_r_t_c___t_f_p_t1206_l1002_f_m_8h_html"><div class="ttname"><a href="_r_t_c___t_f_p_t1206_l1002_f_m_8h.html">RTC_TFPT1206L1002FM.h</a></div><div class="ttdoc">Header file for the TFPT Vishay temperature sensor.</div></div>
 <div class="ttc" id="a_r_t_c___t_f_p_t1206_l1002_f_m_8h_html_a778b2b7f8aca4dda3dcaee7636cb2a72"><div class="ttname"><a href="_r_t_c___t_f_p_t1206_l1002_f_m_8h.html#a778b2b7f8aca4dda3dcaee7636cb2a72">TFPT_Vishay_Values</a></div><div class="ttdeci">const struct TFPT_Vishay TFPT_Vishay_Values[]</div><div class="ttdoc">Array of TFPT_Vishay structures with predefined temperature and ratio values.</div><div class="ttdef"><b>Definition</b> <a href="_r_t_c___t_f_p_t1206_l1002_f_m_8h_source.html#l00025">RTC_TFPT1206L1002FM.h:25</a></div></div>
 <div class="ttc" id="aplatform__types_8h_html"><div class="ttname"><a href="platform__types_8h.html">platform_types.h</a></div></div>
 <div class="ttc" id="aplatform__types_8h_html_adf4d876453337156dde61095e1f20223"><div class="ttname"><a href="platform__types_8h.html#adf4d876453337156dde61095e1f20223">uint16_t</a></div><div class="ttdeci">unsigned short int uint16_t</div><div class="ttdef"><b>Definition</b> <a href="platform__types_8h_source.html#l00004">platform_types.h:4</a></div></div>

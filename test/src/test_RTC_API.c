@@ -3,7 +3,7 @@
 
 int main(int argc, char** argv)
 {
-	RUN_TEST_GROUP(magic_square_3);
+	RUN_TEST_GROUP(RTC_API_TempVsADC);
 	return 0;
 }
 
