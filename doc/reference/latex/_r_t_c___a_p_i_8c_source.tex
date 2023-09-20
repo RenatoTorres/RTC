@@ -1,0 +1,70 @@
+\doxysection{RTC\+\_\+\+API.\+c}
+\hypertarget{_r_t_c___a_p_i_8c_source}{}\label{_r_t_c___a_p_i_8c_source}\index{C:/Users/renato.veiga/Desktop/RTC/src/RTC\_API.c@{C:/Users/renato.veiga/Desktop/RTC/src/RTC\_API.c}}
+\mbox{\hyperlink{_r_t_c___a_p_i_8c}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00001}00001\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{platform__types_8h}{platform\_types.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00002}00002\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_r_t_c___t_f_p_t1206_l1002_f_m_8h}{RTC\_TFPT1206L1002FM.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00003}00003\ }
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00014}00014\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{float}\ getTemp\_Datasheet(\textcolor{keywordtype}{float}\ targetRatio)\ \{}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00015}00015\ \ \ \ \ \textcolor{keywordtype}{int}\ low\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00016}00016\ \ \ \ \ \textcolor{keywordtype}{int}\ high\ =\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{_r_t_c___t_f_p_t1206_l1002_f_m_8h_a778b2b7f8aca4dda3dcaee7636cb2a72}{TFPT\_Vishay\_Values}})\ /\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{_r_t_c___t_f_p_t1206_l1002_f_m_8h_a778b2b7f8aca4dda3dcaee7636cb2a72}{TFPT\_Vishay\_Values}}[0])\ -\/\ 1;}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00017}00017\ \ \ \ \ \textcolor{keywordtype}{int}\ resultIndex\ =\ -\/1;}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00018}00018\ }
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00019}00019\ \ \ \ \ \textcolor{keywordflow}{while}\ (low\ <=\ high)\ \{}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00020}00020\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ mid\ =\ low\ +\ (high\ -\/\ low)\ /\ 2;}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00021}00021\ }
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00022}00022\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{_r_t_c___t_f_p_t1206_l1002_f_m_8h_a778b2b7f8aca4dda3dcaee7636cb2a72}{TFPT\_Vishay\_Values}}[mid].fRatio\_R25\ ==\ targetRatio)\ \{}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00023}00023\ \ \ \ \ \ \ \ \ \ \ \ \ resultIndex\ =\ mid;}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00024}00024\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00025}00025\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00026}00026\ }
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00027}00027\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{_r_t_c___t_f_p_t1206_l1002_f_m_8h_a778b2b7f8aca4dda3dcaee7636cb2a72}{TFPT\_Vishay\_Values}}[mid].fRatio\_R25\ <\ targetRatio)\ \{}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00028}00028\ \ \ \ \ \ \ \ \ \ \ \ \ low\ =\ mid\ +\ 1;}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00029}00029\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00030}00030\ \ \ \ \ \ \ \ \ \ \ \ \ resultIndex\ =\ mid;}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00031}00031\ \ \ \ \ \ \ \ \ \ \ \ \ high\ =\ mid\ -\/\ 1;}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00032}00032\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00033}00033\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00034}00034\ }
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00035}00035\ \ \ \ \ \textcolor{keywordflow}{if}\ (resultIndex\ !=\ -\/1)\ \{}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00036}00036\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Found\ the\ exact\ match\ or\ the\ next\ lower\ fRatio}}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00037}00037\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (resultIndex\ >\ 0)\ \{}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00038}00038\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Use\ linearization\ between\ 2\ datasheet\ points\ to\ optimize\ accuracy}}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00039}00039\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ fTx\ =\ fT1\ +\ ((fRx\ -\/\ fR1)/(fR2\ -\/\ fR1))*(T2\ -\/\ T1);}}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00040}00040\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ (T2\ -\/\ T1)\ is\ always\ 1\ oC}}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00041}00041\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ fT1\ =\ \mbox{\hyperlink{_r_t_c___t_f_p_t1206_l1002_f_m_8h_a778b2b7f8aca4dda3dcaee7636cb2a72}{TFPT\_Vishay\_Values}}[resultIndex\ -\/\ 1].\mbox{\hyperlink{struct_t_f_p_t___vishay_a98ef973afd76b39a6cec35eaaddc3065}{ftemperature}};}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00042}00042\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ fT2\ =\ \mbox{\hyperlink{_r_t_c___t_f_p_t1206_l1002_f_m_8h_a778b2b7f8aca4dda3dcaee7636cb2a72}{TFPT\_Vishay\_Values}}[resultIndex].\mbox{\hyperlink{struct_t_f_p_t___vishay_a98ef973afd76b39a6cec35eaaddc3065}{ftemperature}};}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00043}00043\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ fR1\ =\ \mbox{\hyperlink{_r_t_c___t_f_p_t1206_l1002_f_m_8h_a778b2b7f8aca4dda3dcaee7636cb2a72}{TFPT\_Vishay\_Values}}[resultIndex\ -\/\ 1].\mbox{\hyperlink{struct_t_f_p_t___vishay_a41968c80b2e868c66e6ba9a3e4ba75c3}{fRatio\_R25}};}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00044}00044\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ fR2\ =\ \mbox{\hyperlink{_r_t_c___t_f_p_t1206_l1002_f_m_8h_a778b2b7f8aca4dda3dcaee7636cb2a72}{TFPT\_Vishay\_Values}}[resultIndex].\mbox{\hyperlink{struct_t_f_p_t___vishay_a41968c80b2e868c66e6ba9a3e4ba75c3}{fRatio\_R25}};}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00045}00045\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ fTx\ =\ fT1\ +\ ((targetRatio\ -\/\ fR1)\ /\ (fR2\ -\/\ fR1));}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00046}00046\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ fTx;}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00047}00047\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00048}00048\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{_r_t_c___t_f_p_t1206_l1002_f_m_8h_a778b2b7f8aca4dda3dcaee7636cb2a72}{TFPT\_Vishay\_Values}}[resultIndex].\mbox{\hyperlink{struct_t_f_p_t___vishay_a98ef973afd76b39a6cec35eaaddc3065}{ftemperature}};}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00049}00049\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00050}00050\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00051}00051\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Return\ 'absolute\ zero'\ in\ case\ of\ ratio\ out\ of\ range}}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00052}00052\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/273.0f;}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00053}00053\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00054}00054\ \}}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00055}00055\ }
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00065}00065\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{float}\ getRatioFromADCValue(\mbox{\hyperlink{platform__types_8h_adf4d876453337156dde61095e1f20223}{uint16\_t}}\ uiADCVal)\ \{}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00066}00066\ \ \ \ \ \textcolor{comment}{//\ 12-\/bit\ ADC\ =>\ 2\string^12\ =\ 4096}}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00067}00067\ \ \ \ \ \textcolor{comment}{//\ Range:}}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00068}00068\ \ \ \ \ \textcolor{comment}{//\ 0V\ \ \ -\/\ 0}}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00069}00069\ \ \ \ \ \textcolor{comment}{//\ 2.5V\ -\/\ 4095}}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00070}00070\ }
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00071}00071\ \ \ \ \ \textcolor{comment}{//\ R213\ =\ [(uiADCVal)\ /\ (VREF\ -\/\ uiADCVal)]\ *\ R600}}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00072}00072\ \ \ \ \ \textcolor{comment}{//\ However,\ R600\ is\ 10K\ and\ R213\ (TFPT1206L1002FM)\ is\ 10K\ on\ 25\ oC.}}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00073}00073\ \ \ \ \ \textcolor{comment}{//\ R213/R600\ =\ datasheet\_ratio\ itself}}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00074}00074\ }
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00075}00075\ \ \ \ \ \mbox{\hyperlink{platform__types_8h_adf4d876453337156dde61095e1f20223}{uint16\_t}}\ VREF\ =\ 4095;}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00076}00076\ \ \ \ \ \textcolor{keywordtype}{float}\ fratio\ =\ (uiADCVal)\ /\ (VREF\ -\/\ uiADCVal);}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00077}00077\ }
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00078}00078\ \ \ \ \ \textcolor{keywordflow}{return}\ fratio;}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00079}00079\ \}}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00080}00080\ }
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00091}\mbox{\hyperlink{_r_t_c___a_p_i_8c_a77a7a8c543017522605adb4fdbba38e5}{00091}}\ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{_r_t_c___a_p_i_8c_a77a7a8c543017522605adb4fdbba38e5}{getTemperature}}(\mbox{\hyperlink{platform__types_8h_adf4d876453337156dde61095e1f20223}{uint16\_t}}\ uiADCVal)\ \{}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00092}00092\ \ \ \ \ \textcolor{keywordflow}{return}\ getTemp\_Datasheet(getRatioFromADCValue(uiADCVal));}
+\DoxyCodeLine{\Hypertarget{_r_t_c___a_p_i_8c_source_l00093}00093\ \}}
+
+\end{DoxyCode}

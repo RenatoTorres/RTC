@@ -1,12 +1,27 @@
 #ifndef TFPT_VISHAY_H
 #define TFPT_VISHAY_H
 
+/**
+ * @file TFPT_Vishay.h
+ * @brief Header file for the TFPT Vishay temperature sensor.
+ */
+
+/**
+ * @struct TFPT_Vishay
+ * @brief Structure representing temperature and resistance ratio values.
+ */
 struct TFPT_Vishay {
-    float ftemperature;
-    float fRatio_R25;
+    float ftemperature; /**< The temperature in degrees Celsius. */
+    float fRatio_R25;  /**< The resistance ratio at 25 degrees Celsius. */
 };
 
-// Define a constant array of TFPT_Vishay with the provided values
+/**
+ * @brief Array of TFPT_Vishay structures with predefined temperature and ratio values.
+ *
+ * This constant array stores temperature and resistance ratio values corresponding to
+ * the TFPT Vishay temperature sensor. Each element of the array represents a specific
+ * temperature and its corresponding resistance ratio at 25 degrees Celsius.
+ */
 const struct TFPT_Vishay TFPT_Vishay_Values[] = {
 {-55.0 ,0.702},
 {-54.0 ,0.705},
@@ -54,15 +69,15 @@ const struct TFPT_Vishay TFPT_Vishay_Values[] = {
 {-12.0 ,0.854},
 {-11.0 ,0.858},
 {-10.0 ,0.862},
-{-9.0	,0.866},
-{-8.0	,0.869},
-{-7.0	,0.873},
-{-6.0	,0.877},
-{-5.0	,0.881},
-{-4.0	,0.885},
-{-3.0	,0.889},
-{-2.0	,0.892},
-{-1.0	,0.896},
+{-9.0 ,0.866},
+{-8.0 ,0.869},
+{-7.0 ,0.873},
+{-6.0 ,0.877},
+{-5.0 ,0.881},
+{-4.0 ,0.885},
+{-3.0 ,0.889},
+{-2.0 ,0.892},
+{-1.0 ,0.896},
 {0.0, 0.900},
 {1.0, 0.904},
 {2.0, 0.908},
@@ -217,3 +232,4 @@ const struct TFPT_Vishay TFPT_Vishay_Values[] = {
 };
 
 #endif // TFPT_VISHAY_H
+
